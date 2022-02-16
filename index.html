@@ -208,11 +208,15 @@
                 </div>
 
                 <div class="col m7 s12">
-                  <form>
+                  <div class="alert alert-success alert-dismissible fade show hide my-alert" role="alert">
+                    <strong>Terimakasih</strong> Pesan anda sudah kami terima.
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="close" ></button>
+                  </div>
+                  <form name='graha-gayatri-contact-form'>
                     <div class="card-panel">
                       <h5>Please Fill Out This Form</h5>
                       <div class="input-field">
-                        <input type="text" name="name" id="name" required class="validate">
+                        <input type="text" name="nama" id="name" required class="validate">
                         <label for="name">Name</label>
                       </div>
                       <div class="input-field">
@@ -220,14 +224,17 @@
                         <label for="email">E-Mail</label>
                       </div>
                       <div class="input-field">
-                        <input type="text" name="phone" id="phone">
+                        <input type="text" name="no telepon" id="phone">
                         <label for="phone">Phone Number</label>
                       </div>
                       <div class="input-field">
-                        <textarea name="message" id="message" class="materialize-textarea"></textarea>
+                        <textarea name="pesan" id="message" class="materialize-textarea"></textarea>
                         <label for="message">Message</label>
                       </div>
-                      <button type="submit" class="btn blue darken-3">Send</button>
+                      <button type="submit" class="btn btn-primary blue darken-3 btn-kirim">Send</button>
+                      <button class="btn btn-primary btn-loading hide" type="button" disabled>
+                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true">loading</span>
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -272,6 +279,32 @@
         M.ScrollSpy.init(scroll, {
           scrollOffset: 50
         });
+
+        const scriptURL = 'https://script.google.com/macros/s/AKfycbyhbb5huuCRxvN8fWBdMiV0NBz8YF8pKalDrVQiA0i0HD0k4uAN4GKDyUxiDCrwCR8ojw/exec'
+        const form = document.forms['graha-gayatri-contact-form']
+        const btnKirim = document.querySelector('.btn-kirim');
+        const btnLoading = document.querySelector('.btn-loading');
+        const myAlert = document.querySelector('.my-alert');
+
+        form.addEventListener('submit', (e) => {
+        e.preventDefault()
+        // ketika tombol submit di klik
+        // tampilkan tombol loading, hilangkan tombol kirim
+        btnLoading.classList.toggle('hide');
+        btnKirim.classList.toggle('hide');
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+        .then(response => {
+          // tampilkan tombol kirim, hilangkan tombol loading
+          btnLoading.classList.toggle('hide');
+          btnKirim.classList.toggle('hide');
+          // tampilkan alert
+          myAlert.classList.toggle('hide');
+          // reset form
+          form.reset();
+          console.log('Success!', response)})
+        .catch(error => console.error('Error!', error.message))
+  })
+</script>
 
         
 
